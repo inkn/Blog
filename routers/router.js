@@ -6,7 +6,9 @@ var md5 = require('blueimp-md5')
 var router = express.Router()
 
 router.get('/',function (req, res) {
-    res.render('index.html')
+    res.render('index.html', {
+        user: req.session.user
+    })
 })
 
 //渲染登录页面
@@ -69,7 +71,6 @@ router.post('/signup',function (req, res) {
             })
         }
         if (data) {
-            console.log(data)
             return res.status(200).json({
                 success: true,
                 err_code: 1,
@@ -104,7 +105,13 @@ router.post('/signup',function (req, res) {
     })
 })
 
-
+//处理用户退出请求
+router.get('/signout', function (req, res) {
+    //清除sesson保存的登录状态
+    //重定向到首页
+    req.session.user = null
+    res.redirect('/')
+})
 
 
 

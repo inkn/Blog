@@ -27,7 +27,8 @@ var userSchema = new Schema({
         type: Date,
     },
     bio: {
-        type: String
+        type: String,
+        default: ''
     },
     avatar: {
         type: String,
