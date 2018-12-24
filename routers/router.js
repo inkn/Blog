@@ -38,7 +38,7 @@ router.post('/signin', function (req, res) {
                 message: 'email or password is invalid'
             })
         }
-        //用户存在，设置session
+        //用户存在，设置session    注意是req中才有session
         req.session.user = user
 
         return res.status(200).json({
@@ -66,13 +66,11 @@ router.post('/signup',function (req, res) {
     }, function (err, data) {
         if (err) {
             return res.status(500).json({
-                success: false,
                 message: 'Server error'
             })
         }
         if (data) {
             return res.status(200).json({
-                success: true,
                 err_code: 1,
                 message: 'email or nickname is already exist'
             })
@@ -94,7 +92,7 @@ router.post('/signup',function (req, res) {
 
             // Express 提供了一个响应方法：json
             // 该方法接收一个对象作为参数，它会自动帮你把对象转为字符串再发送给浏览器
-            res.status(200).json({
+            return res.status(200).json({
                 err_code: 0,
                 message: 'OK'
             })
@@ -113,7 +111,83 @@ router.get('/signout', function (req, res) {
     res.redirect('/')
 })
 
+//处理渲染设置页面
+router.get('/setting', function (req, res) {
+    res.render('./settings/profile.html', {
+        user: req.session.user
+    })
+})
 
+//处理设置基本信息的请求
+router.post('/setting', function (req, res) {
+    //通过post传过来的邮箱，找到该用户
+    //更改性别和bio信息  更新session!!!!
+    User.updateOne({email: req.body.email},{$set:{
+            gender: parseInt(req.body.gender),
+            bio: req.body.bio
+        }}, function (err) {
+        if (err) {
+
+            return res.status(500).json({
+                err_code: 500,
+                message: err.message
+            })
+        }
+
+        User.findOne({email: req.body.email} , function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    err_code: 500,
+                    message: err.message
+                })
+            }
+
+            req.session.user = user
+           return res.status(200).json({
+               err_code: 0,
+               message: 'OK'
+           })
+        })
+    })
+})
+
+//处理修改密码请求
+router.post('/setting_pw', function (req, res) {
+    var old_pass = md5(md5(req.body.old_pass))
+    var new_pass = md5(md5(req.body.new_pass))
+    User.findOne({email: req.body.email}, function (err, user) {
+        if (err) {
+            return res.status(500).json({
+                err_code: 500,
+                message: err.message
+            })
+        }
+        if(old_pass != user.password) {
+            return res.status(200).json(
+                {
+                    err_code: 1,
+                    message: '原密码不正确'
+                }
+            )
+        }else {
+            User.updateOne({email: req.body.email}, {$set: {password: new_pass}}, function (err) {
+                if (err) {
+                    return res.status(500).json({
+                        err_code: 500,
+                        message: err.message
+                    })
+                }
+
+
+                return res.status(200).json({
+                    err_code: 0,
+                    message: '密码修改成功'
+                })
+            })
+
+        }
+    })
+})
 
 
 
