@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
+
 //配置session
 app.use(session({
     // 配置加密字符串，它会在原有加密基础之上和这个字符串拼起来去加密

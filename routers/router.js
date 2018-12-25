@@ -1,6 +1,40 @@
 var express = require('express')
 var User = require('../models/user')
 var md5 = require('blueimp-md5')
+var fs = require('fs')
+var gm = require('gm')
+var path = require('path')
+var multer  = require('multer')
+
+//设置图片上传
+var createFolder = function(folder){
+    try{
+        fs.accessSync(folder);
+    }catch(e){
+        fs.mkdirSync(folder);
+    }
+};
+
+var uploadFolder = './upload/';
+
+createFolder(uploadFolder);
+
+// 通过 filename 属性定制
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadFolder);    // 保存的路径，备注：需要自己创建
+    },
+    filename: function (req, file, cb) {
+        // 将保存文件名设置为 字段名 + 时间戳，比如 logo-1478521468943
+        cb(null, file.fieldname + '-' + Date.now());
+    }
+});
+
+// 通过 storage 选项来对 上传行为 进行定制化
+var upload = multer({ storage: storage })
+
+//----设置图片上传-end
+
 
 
 var router = express.Router()
@@ -142,7 +176,7 @@ router.post('/setting', function (req, res) {
                 })
             }
 
-            req.session.user = user
+           req.session.user = user
            return res.status(200).json({
                err_code: 0,
                message: 'OK'
@@ -189,6 +223,58 @@ router.post('/setting_pw', function (req, res) {
     })
 })
 
+//处理头像上传
+router.post('/setting_avt',upload.single('avatar'), function (req, res) {
+    if (!req.file) {
+        return res.status(200).json({
+            err_code: 1,
+            message: '请选择上传的文件'
+        })
+    }
+
+     if (!req.file.mimetype || req.file.mimetype.indexOf('image/') != 0) {
+         return res.status(200).json({
+             err_code: 2,
+             message: '上传的文件不是图片类型'
+         })
+     }
+
+
+
+    //上传的是图片，使用gm 更改后 保存到public/avatar
+    var avatar = path.join('/public/avatar/' +
+        req.session.user.nickname+ '-' + req.file.filename + '.' +
+        req.file.originalname.split('.')[req.file.originalname.split('.').length - 1])
+
+    gm(req.file.path)
+        .resize(200, 200, '!')
+        .write('.' + avatar, function (err) {
+            if (err) {
+                return res.status(500).json({
+                    err_code: 500,
+                    message: err.message
+                })
+            }
+            //修改并保存成功后，修改数据库中user的avatar , todo 删除upload中的文件
+            User.updateOne({email: req.session.user.email}, {$set: {avatar: avatar}}, function (err) {
+                if (err) {
+                    return res.status(500).json({
+                        err_code: 500,
+                        message: err.message
+                    })
+                }
+
+                //修改数据库中的avatar后，修改session中的avatar
+                req.session.user.avatar = avatar
+
+                res.redirect('/setting')
+                // return res.status(200).json({
+                //     err_code: 200,
+                //     message: 'Update avatar is OK'
+                // })
+            })
+        })
+})
 
 
 module.exports = router
