@@ -1,0 +1,84 @@
+{{ extend '../_layouts/home.html'}}
+
+
+{{ block 'body' }}
+
+<div class='panel' style="margin: 10px auto;width: 900px">
+    <div class='header'>
+        <ol class='breadcrumb'>
+            <li><a href='/'>主页</a><span class='divider'>/</span></li>
+
+            <li class='active'>发布话题</li>
+
+        </ol>
+    </div>
+    <div class='inner post'>
+
+
+        <form id='create_topic_form' action='/topic/create' method='post'>
+
+                <textarea autofocus class='span9' id='title' name='title' rows='1'
+                          placeholder="标题字数 10 字以上"
+                ></textarea>
+
+
+            <div>
+                <textarea class='editor' name='t_content' rows='20'></textarea>
+                <div class='editor_buttons'>
+                    <input type="submit" class='span-primary submit_btn' value="提交">
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+
+</div>
+
+
+<!-- markdown editor -->
+<script src="/public/js/editor.min.js"></script>
+
+</div>
+
+
+<!--个人信息-->
+{{ if user}}
+<div style="position: fixed;right: 10px;top: 80px;">
+    <div id='sidebar'>
+
+        <div class='panel'>
+
+            <div class='header'>
+                <span class='col_fade'>个人信息</span>
+            </div>
+            <div class='inner'>
+                <div class='user_card'>
+                    <div>
+                        <a class='user_avatar' href="/myTopic">
+                            <img src={{ user.avatar }} title={{ user.nickname }}/>
+                        </a>
+                        <span class='user_name'><a class='dark' href="/myTopic">{{ user.nickname }}</a></span>
+                        <span class="signature">
+                            {{ if user.bio === ''}}
+        “
+
+            这家伙很懒，什么个性签名都没有留下。
+
+        ”
+                            {{ else }}
+        “
+
+            {{ user.bio}}
+
+        ”
+                            {{/if}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}
+{{ /block}}

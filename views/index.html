@@ -3,136 +3,64 @@
 {{block 'title'}}Blog{{/block}}
 {{block 'body'}}
 
-    <div class="panel" style="margin: 10px auto;width: 900px">
-        <div class="topic-tab">
-            全部文章
-        </div>
-        <div class='cell'>
+<div class="panel" style="margin: 10px auto;width: 900px">
+    <div class="topic-tab">
+        全部文章
+    </div>
+    <div class='cell'>
+        {{ each topics }}
+        <div class="cell">
 
-            <a class="user_avatar pull-left" href="/user/alsotang">
-                <img src="https://avatars1.githubusercontent.com/u/1147375?v=4&amp;s=120"
-                     title="alsotang"
-                />
+            <a class="user_avatar pull-left" href="/user/Dirmond">
+                <img src="{{ $value.author_avatar }}" title="Dirmond">
             </a>
 
             <span class="reply_count pull-left">
-    <span class="count_of_replies" title="回复数">
-      107
-    </span>
-    <span class="count_seperator">/</span>
-    <span class="count_of_visits" title='点击数'>
-      9595
-    </span>
-  </span>
+                <span class="count_of_replies" title="回复数">
+                  {{ $value.commentNum }}
+                </span>
+                <span class="count_seperator">/</span>
+                <span class="count_of_visits" title="点击数">
+                  {{ $value.visitedNum }}
+                </span>
+            </span>
 
 
-            <a class='last_time pull-right' href="/topic/5bd4772a14e994202cd5bdb7#5c19266776c4964062a1b0d2">
-                <img class="user_small_avatar" src="https://avatars1.githubusercontent.com/u/12067286?v=4&amp;s=120">
-                <span class="last_active_time">2 天前</span>
-            </a>
+            <span class="last_time pull-right">
+                <span class="last_active_time">{{ $value.lastUpdate_time }}</span>
+            </span>
 
 
             <div class="topic_title_wrapper">
-
-
-                <span class='put_top'>置顶</span>
-
-
-                <a class='topic_title' href='/topic/5bd4772a14e994202cd5bdb7' title='服务器迁移至 aws 日本机房'>
-                    服务器迁移至 aws 日本机房
+                <!-- todo-->
+                <a class="topic_title" href="todo " title="{{ $value.title }}">
+                    {{ $value.title }}
                 </a>
             </div>
         </div>
-        <div class='cell'>
 
-            <a class="user_avatar pull-left" href="/user/chengl123">
-                <img src="https://avatars3.githubusercontent.com/u/42384077?v=4&amp;s=120"
-                     title="chengl123"
-                />
-            </a>
-
-            <span class="reply_count pull-left">
-    <span class="count_of_replies" title="回复数">
-      33
-    </span>
-    <span class="count_seperator">/</span>
-    <span class="count_of_visits" title='点击数'>
-      4450
-    </span>
-  </span>
-
-
-            <a class='last_time pull-right' href="/topic/5b7f8a2c944cb8340c27e335#5c1b4eff76c4964062a1bd46">
-                <img class="user_small_avatar" src="https://avatars2.githubusercontent.com/u/44309893?v=4&amp;s=120">
-                <span class="last_active_time">44 分钟前</span>
-            </a>
-
-
-            <div class="topic_title_wrapper">
-
-
-                <span class="topiclist-tab">分享</span>
-
-
-                <a class='topic_title' href='/topic/5b7f8a2c944cb8340c27e335'
-                   title='2018年Nodejs Koa2 Typescript Eggjs Vue2最新教程资源网盘分享'>
-                    2018年Nodejs Koa2 Typescript Eggjs Vue2最新教程资源网盘分享
-                </a>
-            </div>
-        </div>
-        <div class='cell'>
-
-            <a class="user_avatar pull-left" href="/user/meikoooo">
-                <img src="https://avatars0.githubusercontent.com/u/45453683?v=4&amp;s=120"
-                     title="meikoooo"
-                />
-            </a>
-
-            <span class="reply_count pull-left">
-    <span class="count_of_replies" title="回复数">
-      9
-    </span>
-    <span class="count_seperator">/</span>
-    <span class="count_of_visits" title='点击数'>
-      497
-    </span>
-  </span>
-
-
-            <a class='last_time pull-right' href="/topic/5c189bd17ec239239ff57fb4#5c1b4be13898674067a766bf">
-                <img class="user_small_avatar" src="https://avatars1.githubusercontent.com/u/37055388?v=4&amp;s=120">
-                <span class="last_active_time">1 小时前</span>
-            </a>
-
-
-        </div>
+        {{ /each }}
     </div>
 
-<!--个人信息-->
-{{ if user}}
-<div  style="position: fixed;right: 10px;top: 80px;">
-    <div id='sidebar'>
+    <!--个人信息-->
+    {{ if user}}
+    <div style="position: fixed;right: 10px;top: 80px;">
+        <div id='sidebar'>
 
-        <div class='panel'>
+            <div class='panel'>
 
-            <div class='header'>
-                <span class='col_fade'>个人信息</span>
-            </div>
-            <div class='inner'>
-                <div class='user_card'>
-                    <div>
-                        <a class='user_avatar' href="/myTopic">
-                            <img src={{ user.avatar }} title={{ user.nickname }}/>
-                        </a>
-                        <span class='user_name'><a class='dark' href="/myTopic">{{ user.nickname }}</a></span>
-
-                        <div class='board clearfix'>
-                            <div class='floor'>
-                                <span class='big'>积分: 0 </span>
-                            </div>
-                        </div>
-                        <div class="space clearfix"></div>
-                        <span class="signature">
+                <div class='header'>
+                    <span class='col_fade'>个人信息</span>
+                </div>
+                <div class='inner'>
+                    <div class='user_card'>
+                        <div>
+                            <a class='user_avatar' href="/myTopic">
+                                <img src="{{ user.avatar }}" title="{{ user.nickname }}"/>
+                            </a>
+                            <span class='user_name'><a class='dark' href="/myTopic">{{ user.nickname }}</a></span>
+                            <div class="space clearfix"></div>
+                            <span class="signature">
                             {{ if user.bio === ''}}
         “
 
@@ -147,20 +75,21 @@
         ”
                             {{/if}}
                         </span>
+                            <div class="space clearfix"></div>
+                            <div class='inner'>
+                                <a href='/topic/create' id='create_topic_btn'>
+                                    <span class='span-success'>发布话题</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
     </div>
-
-    <div class='inner' style="position: fixed; top: 270px;right: 216px;">
-        <a href='/topic/create' id='create_topic_btn'>
-            <span class='span-success'>发布话题</span>
-        </a>
-    </div>
-
-</div>
-{{/if}}
+    {{/if}}
 
 
-{{/block}}
+    {{/block}}

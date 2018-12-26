@@ -34,6 +34,16 @@ app.use(session({
 //挂载路由
 app.use(router)
 
+//配置错误处理中间件
+app.use(function (err, req, res, next) {
+    res.render('error.html',{err: err})
+})
+
+//配置404处理中间件
+app.use(function (req, res, next) {
+    res.render('404.html')
+})
+
 
 app.listen(3000, function () {
     console.log('app is running...')
