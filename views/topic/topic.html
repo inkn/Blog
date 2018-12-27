@@ -1,0 +1,172 @@
+{{ extend '../_layouts/home.html'}}
+
+{{ block 'title' }}
+{{ topic.title }}
+{{ /block}}
+
+{{ block 'body' }}
+
+<div style="margin: 10px 15%;width: 65%">
+    <div class='panel'>
+        <div class='header topic_header'>
+            <h3>{{ topic.title}}</h3>
+            <div class="changes">
+                <span>
+                  发布于 {{ topic.created_time.toLocaleString() }}
+                </span>
+
+                <span>
+                  作者 <a href="#">{{ topic.author }}</a>
+                </span>
+                <span>
+                  {{ topic.visitedNum }} 次浏览
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class='inner topic'>
+
+            <div class='topic_content'>
+                <div class="markdown-text"><p>{{ topic.t_content}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class='panel'>
+        <div class='header'>
+            <span class='col_fade'>{{topic.comments.length}} 回复</span>
+        </div>
+        <div class='cell reply_area reply_item'>
+
+            <!--todo 异步分页 加评论 -->
+            <!--{{ each topic.comments }}-->
+
+
+
+            <!--<div class="cell reply_area reply_item">-->
+                <!--<div class="author_content">-->
+                    <!--<img src="{{ $value.author_avatar }}" title=" {{$value.author}}">-->
+
+                    <!--<div class="user_info">-->
+                        <!--<a class="dark reply_author" href="/user/Jevaeson">Jevaeson</a>-->
+                        <!--<a class="reply_time" href="#5c205ba93898674067a77927">4楼•3 天前</a>-->
+
+                    <!--</div>-->
+                    <!--<div class="user_action">-->
+      <!--<span>-->
+        <!--<i class="fa up_btn           fa-thumbs-o-up" title="喜欢"></i>-->
+        <!--<span class="up-count">-->
+          <!--1-->
+        <!--</span>-->
+      <!--</span>-->
+
+                        <!--<span>-->
+
+          <!--<i class="fa fa-reply reply2_btn" title="回复"></i>-->
+
+      <!--</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="reply_content from-Jevaeson">-->
+                    <!--<div class="markdown-text"><p>不清楚</p>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="clearfix">-->
+                    <!--<div class="reply2_area">-->
+
+                        <!--<form class="reply2_form" action="/5c201dca3898674067a7768b/reply" method="post">-->
+                            <!--<input type="hidden" name="_csrf" value="0mF4k8A0-139s24CdK_8pexyNXgIwYT0W928">-->
+                            <!--<input type="hidden" name="reply_id" value="5c205ba93898674067a77927">-->
+
+                            <!--<div class="markdown_editor in_editor">-->
+                                <!--<div class="markdown_in_editor">-->
+                                    <!--<textarea class="span8 editor reply_editor" id="reply2_editor_5c205ba93898674067a77927" name="r_content" rows="4" style="display: none;"></textarea><div class="editor-toolbar"><a class="eicon-bold"></a><a class="eicon-italic"></a><i class="separator">|</i><a class="eicon-quote"></a><a class="eicon-unordered-list"></a><a class="eicon-ordered-list"></a><i class="separator">|</i><a class="eicon-link"></a><a class="eicon-image"></a><i class="separator">|</i><a class="eicon-info" href="http://lab.lepture.com/editor/markdown" target="_blank"></a><a class="eicon-preview"></a><a class="eicon-fullscreen"></a></div><div class="CodeMirror cm-s-paper"><div style="overflow: hidden; position: relative; width: 3px; height: 0px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; padding: 0px; width: 1000px; height: 1em; outline: none; font-size: 4px;"></textarea></div><div class="CodeMirror-hscrollbar"><div style="height: 1px;"></div></div><div class="CodeMirror-vscrollbar"><div style="width: 1px;"></div></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="min-width: 33px;"><div style="position: relative;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre>&nbsp;<span>​</span></pre></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"></div><div class="CodeMirror-cursor">&nbsp;</div><div class="CodeMirror-cursor CodeMirror-secondarycursor">&nbsp;</div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px;"></div><div class="CodeMirror-gutters" style="display: none;"></div></div></div>-->
+
+                                    <!--<div class="editor_buttons">-->
+                                        <!--<input class="span-primary reply2_submit_btn submit_btn" type="submit" data-id="5c205ba93898674067a77927" data-loading-text="回复中.." value="回复">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                            <!--</div>-->
+
+                        <!--</form>-->
+
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+
+            <!--{{ /each}}-->
+
+
+        </div>
+    </div>
+    <div class="panel">
+        <div class="header">
+            <span class="col_fade">添加回复</span>
+        </div>
+        <div class="inner reply">
+            <form id="reply_form" action="/5c201dca3898674067a7768b/reply" method="post">
+
+                <div class="markdown_editor in_editor">
+                    <div class="markdown_in_editor">
+                        <textarea class="editor" name="r_content" rows="8" ></textarea>
+
+                        <div class="editor_buttons">
+                            <input class="span-primary submit_btn" type="submit" data-loading-text="回复中.." value="回复">
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!--// 作者信息-->
+<div style="position: fixed;right: 18px;top: 76px;width: 18%;">
+    <div class='panel'>
+
+        <div class='header'>
+            <span class='col_fade'>作者信息</span>
+        </div>
+        <div class='inner'>
+            <div class='user_card'>
+                <div>
+                    <a class='user_avatar' href="/myTopic">
+                        <img src="{{ topic.author_avatar }}" title="{{ topic.author }}"/>
+                    </a>
+                    <span class='user_name'><a class='dark' href="/myTopic">{{ topic.author }}</a></span>
+                    <div class="space clearfix"></div>
+                    <span class="signature">
+                            {{ if topic.author_bio === ''}}
+        “
+
+            这家伙很懒，什么个性签名都没有留下。
+
+        ”
+                            {{ else }}
+        “
+
+            {{ topic.author_bio }}
+
+        ”
+                            {{/if}}
+                        </span>
+                    <div class="space clearfix"></div>
+                    <div class='inner'>
+                        <a href='/topic/create' id='create_topic_btn'>
+                            <span class='span-success'>发布话题</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ /block }}

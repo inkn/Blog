@@ -3,7 +3,7 @@
 
 {{ block 'body' }}
 
-<div class='panel' style="margin: 10px auto;width: 900px">
+<div class='panel' style="margin: 10px 15%;width: 65%">
     <div class='header'>
         <ol class='breadcrumb'>
             <li><a href='/'>主页</a><span class='divider'>/</span></li>
@@ -44,22 +44,21 @@
 
 <!--个人信息-->
 {{ if user}}
-<div style="position: fixed;right: 10px;top: 80px;">
-    <div id='sidebar'>
+<div style="position: fixed;right: 18px;top: 76px;width: 18%;">
 
-        <div class='panel'>
+    <div class='panel'>
 
-            <div class='header'>
-                <span class='col_fade'>个人信息</span>
-            </div>
-            <div class='inner'>
-                <div class='user_card'>
-                    <div>
-                        <a class='user_avatar' href="/myTopic">
-                            <img src={{ user.avatar }} title={{ user.nickname }}/>
-                        </a>
-                        <span class='user_name'><a class='dark' href="/myTopic">{{ user.nickname }}</a></span>
-                        <span class="signature">
+        <div class='header'>
+            <span class='col_fade'>个人信息</span>
+        </div>
+        <div class='inner'>
+            <div class='user_card'>
+                <div>
+                    <a class='user_avatar' href="/myTopic">
+                        <img src={{ user.avatar }} title={{ user.nickname }}/>
+                    </a>
+                    <span class='user_name'><a class='dark' href="/myTopic">{{ user.nickname }}</a></span>
+                    <span class="signature">
                             {{ if user.bio === ''}}
         “
 
@@ -74,11 +73,11 @@
         ”
                             {{/if}}
                         </span>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 {{/if}}
 {{ /block}}

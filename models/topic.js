@@ -10,8 +10,7 @@ var Schema = mongoose.Schema
 
 var topicSchema = new Schema({
     title: {
-        type: String,
-        default: '默认标题'
+        type: String
     },
     t_content: {
         type: String
@@ -32,8 +31,15 @@ var topicSchema = new Schema({
         type: Number,
         default: 0
     },
-    favs: [{author: String}],
-    comments: [{author: String, content: String, date: {type: Date, default: Date.now}}],
+    comments: [
+        {
+            author: String,
+            author_avatar:String,
+            content: String,
+            favs: [{author: String}],
+            c_comments: [{author: String,author_avatar:String, content: String}],
+            date: {type: Date, default: Date.now}
+        }],
     display: {
         type: Number,
         default: 0

@@ -4,7 +4,7 @@
 
 {{ block 'body' }}
 
-<div id='content' style="margin: 10px auto;width: 900px">
+<div style="margin: 10px 15%;width: 65%">
     <div class='panel'>
         <div class='header'>
             <ul class='breadcrumb'>
@@ -15,13 +15,14 @@
         <div class='inner'>
 
 
-            <form id='setting_form' class='form-horizontal' >
+            <form id='setting_form' class='form-horizontal'>
                 <div class='control-group'>
                     <label class='control-label' for='name'>用户名</label>
 
                     <div class='controls'>
-                        <input class='input-xlarge readonly' id='name' name='nickname' size='30' type='text' readonly='true'
-                               value="{{ user.nickname }}" />
+                        <input class='input-xlarge readonly' id='name' name='nickname' size='30' type='text'
+                               readonly='true'
+                               value="{{ user.nickname }}"/>
                     </div>
                 </div>
                 <div class='control-group'>
@@ -29,7 +30,7 @@
 
                     <div class='controls'>
                         <input class='input-xlarge readonly' name='email' size='30' type='text' readonly='true'
-                               value="{{ user.email }}" />
+                               value="{{ user.email }}"/>
                     </div>
                 </div>
                 <div class='control-group'>
@@ -37,21 +38,21 @@
 
                     <div class='controls'>
                         {{ if user.gender === -1 }}
-                        <input name='gender' type='radio' value="-1" checked />&nbsp保密&nbsp&nbsp
+                        <input name='gender' type='radio' value="-1" checked/>&nbsp保密&nbsp&nbsp
                         {{ else }}
-                        <input name='gender' type='radio' value="-1"  />&nbsp保密&nbsp&nbsp
+                        <input name='gender' type='radio' value="-1"/>&nbsp保密&nbsp&nbsp
                         {{ /if }}
 
                         {{ if user.gender === 1 }}
-                        <input name='gender' type='radio' value="1" checked />&nbsp男&nbsp&nbsp
+                        <input name='gender' type='radio' value="1" checked/>&nbsp男&nbsp&nbsp
                         {{ else }}
-                        <input name='gender' type='radio' value="1" />&nbsp男&nbsp&nbsp
+                        <input name='gender' type='radio' value="1"/>&nbsp男&nbsp&nbsp
                         {{ /if }}
 
                         {{ if user.gender === 0 }}
-                        <input name='gender' type='radio' value="0" checked />&nbsp女
+                        <input name='gender' type='radio' value="0" checked/>&nbsp女
                         {{ else }}
-                        <input name='gender' type='radio' value="0" />&nbsp女
+                        <input name='gender' type='radio' value="0"/>&nbsp女
                         {{ /if }}
 
 
@@ -62,13 +63,14 @@
                     <label class='control-label' for='signature'>个性签名</label>
 
                     <div class='controls'>
-                        <textarea class='input-xlarge' id='signature' name='bio' size='30' placeholder="{{ user.bio }}" ></textarea>
+                        <textarea class='input-xlarge' id='signature' name='bio' size='30'
+                                  placeholder="{{ user.bio }}"></textarea>
                     </div>
                 </div>
 
 
-                <div class='form-actions' >
-                    <input type='submit' class='span-primary submit_btn'  value='保存设置'/>
+                <div class='form-actions'>
+                    <input type='submit' class='span-primary submit_btn' value='保存设置'/>
                 </div>
             </form>
         </div>
@@ -99,7 +101,8 @@
                 <div class='form-actions'>
                     <input type='submit' class='span-primary submit_btn' data-loading-text="更改中.." value='更改密码'/>
                 </div>
-            </form>/
+            </form>
+            /
         </div>
     </div>
 
@@ -109,10 +112,10 @@
         </div>
         <div class='inner'>
 
-            <form action="/setting_avt" method="post" enctype="multipart/form-data" >
-            <img src="{{ user.avatar }}" alt="{{ user.nickname }}">
-            <input type="file" name = "avatar" accept="image/*">
-            <input type='submit' class='span-primary refreshToken' value='上传'/>
+            <form action="/setting_avt" method="post" enctype="multipart/form-data">
+                <img src="{{ user.avatar }}" alt="{{ user.nickname }}">
+                <input type="file" name="avatar" accept="image/*">
+                <input type='submit' class='span-primary refreshToken' value='上传'/>
             </form>
         </div>
     </div>
@@ -121,24 +124,24 @@
 
 <!--个人信息-->
 {{ if user}}
-<div  style="position: fixed;right: 10px;top: 80px;">
-    <div id='sidebar'>
+<div style="position: fixed;right: 18px;top: 76px;width: 18%;">
 
-        <div class='panel'>
 
-            <div class='header'>
-                <span class='col_fade'>个人信息</span>
-            </div>
-            <div class='inner'>
-                <div class='user_card'>
-                    <div>
-                        <a class='user_avatar' href="/myTopic">
-                            <img src={{ user.avatar }} title={{ user.nickname }}/>
-                        </a>
-                        <span class='user_name'><a class='dark' href="/myTopic">{{ user.nickname }}</a></span>
+    <div class='panel'>
 
-                        <div class="space clearfix"></div>
-                        <span class="signature">
+        <div class='header'>
+            <span class='col_fade'>个人信息</span>
+        </div>
+        <div class='inner'>
+            <div class='user_card'>
+                <div>
+                    <a class='user_avatar' href="/myTopic">
+                        <img src={{ user.avatar }} title={{ user.nickname }}/>
+                    </a>
+                    <span class='user_name'><a class='dark' href="/myTopic">{{ user.nickname }}</a></span>
+
+                    <div class="space clearfix"></div>
+                    <span class="signature">
                             {{ if user.bio === ''}}
         “
 
@@ -153,11 +156,11 @@
         ”
                             {{/if}}
                         </span>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 {{/if}}
 {{ /block }}
@@ -181,7 +184,7 @@
                     // 服务端重定向针对异步请求无效
                     window.location.href = '/setting'
                 } else if (err_code === 500) {
-                    window.alert('服务错误：'+data.message)
+                    window.alert('服务错误：' + data.message)
                 }
             }
         })
@@ -199,7 +202,7 @@
                     alert(data.message)
                     window.location.href = '/setting'
                 } else if (data.err_code === 500) {
-                    alert('服务错误:'+data.message)
+                    alert('服务错误:' + data.message)
                 } else if (data.err_code === 1) {
                     alert(data.message)
                 }

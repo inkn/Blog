@@ -40,38 +40,62 @@ var router = express.Router()
 
 router.get('/', function (req, res, next) {
 
-    // 查找话题数据
-    Topic.find(function (err, topics) {
-        if (err) {
-            return next(err)
-        }
-        // art-template 渲染不了这种数组中有数组的对象
-        // var topics = [
-        //     {
-        //         title: 'afafafa',
-        //         sa: [1,2,23]
-        //     }]
-        //所以要处理topic数据
-        var topics_index = []
-        for (var i = 0; i < topics.length; i++) {
-            topics_index.push({
-                title: topics[i].title,
-                author: topics[i].author,
-                author_avatar: topics[i].author_avatar,
-                created_time: topics[i].created_time,
-                commentNum: topics[i].comments.length,
-                favsNum: topics[i].favs.length,
-                visitedNum: topics[i].visitedNum,
-                lastUpdate_time: topics[i].lastUpdate_time
-            })
-        }
-        console.log(topics_index);
-        res.render('index.html', {
-            user: req.session.user,
-            topics: topics_index
-        })
-    })
+    // 同步分页
+    var pageSize = 12
+    var page = req.query.page ? Number.parseInt(req.query.page, 10) : 1
+    page = page <= 0 ? 1 : page
 
+    // 根据请求的页码查找对应的话题数据
+    Topic.find()
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+        .exec((err, topics) => {
+            if (err) {
+                return next(err)
+            }
+
+            //查询所有话题的数目   总页数 = 话题总数目 / 每页话题数
+            Topic.countDocuments((err, count) => {
+                if (err) {
+                    return next(err)
+                }
+
+                //计算总页数
+                var totalPage = Math.ceil(count/pageSize)
+                var totalPageToTemplate = new Array(totalPage)
+
+
+                // art-template 渲染不了mongoose对象中含有数组的对象
+                // var topics = [
+                //     {
+                //         'title': 'afafafa',
+                //         'sa': [1,2,23]
+                //     }]
+                //这种可以渲染
+                // 所以要处理topic数据
+
+                var topics_index = []
+                for (var i = 0; i < topics.length; i++) {
+                    topics_index.push({
+                        t_id: topics[i]._id,
+                        title: topics[i].title,
+                        author: topics[i].author,
+                        author_avatar: topics[i].author_avatar,
+                        created_time: topics[i].created_time,
+                        commentNum: topics[i].comments.length,
+                        favsNum: topics[i].favs.length,
+                        visitedNum: topics[i].visitedNum,
+                        lastUpdate_time: topics[i].lastUpdate_time
+                    })
+                }
+                res.render('index.html', {
+                    user: req.session.user,
+                    topics: topics_index,
+                    page: page,
+                    totalPage: totalPageToTemplate
+                })
+            })
+        })
 
 })
 
@@ -319,18 +343,48 @@ router.get('/topic/create', function (req, res) {
 //处理发表话题请求
 router.post('/topic/create', function (req, res, next) {
     var topic = req.body
+    if (topic.title === '') topic.title = '默认标题'
     topic.author = req.session.user.nickname
     topic.author_avatar = req.session.user.avatar
     new Topic(topic).save(function (err) {
         if (err) {
             return next(err)
         }
-
         res.redirect('/')
     })
-
-
-
 })
+
+//渲染话题页面
+router.get('/topic', function (req, res, next) {
+    // 根据id查找数据库的话题
+
+    Topic.findOne({_id: req.query.t_id.replace(/"/g,'')}, (err, topic) => {
+        if (err) {
+            return next(err)
+        }
+        if (!topic) return next()
+        //找到作者的签名
+        User.findOne({nickname: topic.author}, (err, author) => {
+            if (err) return next(err)
+
+            //增加话题的访问次数
+            Topic.updateOne({_id: req.query.t_id.replace(/"/g,'')},{$set:{visitedNum: ++topic.visitedNum}},(err) => {
+                if (err) return next(err)
+
+                // art-template 渲染不了mongoose对象中含有数组的对象
+                topic=topic.toJSON()
+                topic.author_bio = author.bio
+                res.render('./topic/topic.html',{
+                    topic
+                })
+
+            })
+
+
+        })
+
+    })
+})
+
 
 module.exports = router
