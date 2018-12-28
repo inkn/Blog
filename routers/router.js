@@ -83,7 +83,6 @@ router.get('/', function (req, res, next) {
                         author_avatar: topics[i].author_avatar,
                         created_time: topics[i].created_time,
                         commentNum: topics[i].comments.length,
-                        favsNum: topics[i].favs.length,
                         visitedNum: topics[i].visitedNum,
                         lastUpdate_time: topics[i].lastUpdate_time
                     })
@@ -223,25 +222,10 @@ router.post('/setting', function (req, res, next) {
             bio: req.body.bio
         }
     }, function (err) {
-        if (err) {
-
-            //当next带有参数时，会直接去找带有四个参数（err, req, res, next）的应用程序级别中间件（app.js中配置的错误处理中间件）
-            return next(err)
-            // return res.status(500).json({
-            //     err_code: 500,
-            //     message: err.message
-            // })
-        }
+        if (err) return res.status(500).json({message: err.message})
 
         User.findOne({email: req.body.email}, function (err, user) {
-            if (err) {
-                //当next带有参数时，会直接去找带有四个参数（err, req, res, next）的应用程序级别中间件（app.js中配置的错误处理中间件）
-                return next(err)
-                // return res.status(500).json({
-                //     err_code: 500,
-                //     message: err.message
-                // })
-            }
+            if (err) return res.status(500).json({message: err.message})
 
             req.session.user = user
             return res.status(200).json({
@@ -258,7 +242,7 @@ router.post('/setting_pw', function (req, res, next) {
     var new_pass = md5(md5(req.body.new_pass))
     User.findOne({email: req.body.email}, function (err, user) {
         if (err) {
-            return next(err)
+            if (err) return res.status(500).json({message: err.message})
         }
         if (old_pass != user.password) {
             return res.status(200).json(
@@ -270,7 +254,7 @@ router.post('/setting_pw', function (req, res, next) {
         } else {
             User.updateOne({email: req.body.email}, {$set: {password: new_pass}}, function (err) {
                 if (err) {
-                    return next(err)
+                    if (err) return res.status(500).json({message: err.message})
                 }
 
 
@@ -386,5 +370,61 @@ router.get('/topic', function (req, res, next) {
     })
 })
 
+//***************************************************topic end
+
+//异步处理回复评论提交
+router.post('/topic/reply', (req, res, next) => {
+    // 用户登录了才能评论
+    var user = req.session.user
+    if (!user) return res.status(200).json({err_code: 1})
+    var body = req.body
+    // 因为评论是一个数组，先要得到，再push一条数据，然后再更新话题的评论数据
+    Topic.findOne({_id: body.topic_id.replace(/"/g, '')}, (err, topic) => {
+        if (err) return res.status(500).json({message: err.message})
+        if (!topic) return res.json({err_code: 500, message: '没有找到这条数据'})
+        var comments = topic.comments
+        var comment = {"author": user.nickname, "author_avatar": user.avatar, "content": body.content}
+        comments.push(comment)
+        Topic.updateOne({_id: body.topic_id.replace(/"/g, '')}, {$set: {comments: comments}}, err => {
+            if (err) return res.status(500).json({message: err.message})
+            return res.json({err_code: 0, message: 'OK'})
+        })
+    })
+})
+
+//异步处理评论点赞
+router.get('/topic/fav', (req, res, next) => {
+    // 用户登录了才能点赞
+    var user = req.session.user
+    if (!user) return res.status(200).json({err_code: 1})
+    var t_id = req.query.t_id.replace(/"/g, '')
+    var c_id = req.query.c_id.replace(/"/g, '')
+    Topic.findOne({_id: t_id}, (err, topic) => {
+        if (err) return res.status(500).json({message: err.message})
+        var comments = topic.comments
+        for (var i =0; i < comments.length; i++) {
+
+            if (comments[i]._id == c_id) {
+                var flag = true
+                for (var j = 0; j < comments[i].favs.length; j++) {
+                    if (comments[i].favs[j].author === user.nickname) {
+                        flag = false
+                        break
+                    }
+                }
+
+                flag&&comments[i].favs.push({"author": user.nickname})
+                break
+            }
+
+        }
+        Topic.updateOne({_id: t_id}, {$set:{comments:comments}}, (err) => {
+            if (err) return res.status(500).json({message: err.message})
+            return res.status(200).json({message: 'OK'})
+        })
+
+
+    })
+})
 
 module.exports = router

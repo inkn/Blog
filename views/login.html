@@ -48,7 +48,6 @@
             data: formData,
             dataType: 'json',
             success: function (data) {
-                console.log(data);
                 var err_code = data.err_code
                 if (err_code === 0) {
                     window.alert('登录成功！')

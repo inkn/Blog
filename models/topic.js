@@ -37,7 +37,7 @@ var topicSchema = new Schema({
             author_avatar:String,
             content: String,
             favs: [{author: String}],
-            c_comments: [{author: String,author_avatar:String, content: String}],
+            c_comments: [{author: String,author_avatar:String, content: String,date: {type: Date, default: Date.now}}],
             date: {type: Date, default: Date.now}
         }],
     display: {
