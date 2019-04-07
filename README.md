@@ -1,4 +1,4 @@
-# Express + mongoose + art-template 的简易博客系统
+# Express + mongoose + art-template 的简易博客社区
 
 ## 功能描述
 
