@@ -1,5 +1,19 @@
 # Express + mongoose + art-template 的简易博客社区
 
+## 开始
+需要先安装 [Node.js](https://nodejs.org/zh-cn/download/)、[mongodb](https://www.mongodb.com/download-center/community)、[Graphics Magick](https://sourceforge.net/projects/graphicsmagick/files/latest/download)(头像处理需要)
+
+安装：
+```shell
+git clone git@github.com:inkn/express-blog-demo.git
+```
+
+运行：
+1. 启动 mongodb 服务
+```shell
+```
+
+
 ## 功能描述
 
 - [x] 用户登录、注册、退出
