@@ -10,7 +10,14 @@ git clone git@github.com:inkn/express-blog-demo.git
 
 运行：
 1. 启动 mongodb 服务
+
+你只需要在 MongoDB 安装目录的 bin 目录下执行 mongodb 即可
+
+2. 进入项目根目录
+
 ```shell
+npm install
+npm start
 ```
 
 
@@ -24,6 +31,28 @@ git clone git@github.com:inkn/express-blog-demo.git
 - [x] 查看文章
 - [x] 添加评论
 - [x] 评论点赞
+
+
+## 项目截图
+
+### 首页
+
+![首页](./readme_img/首页.png)
+
+### 注册
+
+![注册](./readme_img/注册.png)
+
+### 登录
+
+![登录](./readme_img/登录.png)
+
+### 设置
+
+![设置](./readme_img/设置.gif)
+
+### 评论
+![评论](./readme_img/评论.gif)
 
 
 ## 使用的其他第三方库

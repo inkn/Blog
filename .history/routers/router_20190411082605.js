@@ -305,11 +305,11 @@ router.post('/setting_avt', upload.single('avatar'), function (req, res, next) {
                 //修改数据库中的avatar后，修改session中的avatar
                 req.session.user.avatar = avatar
 
-                res.redirect('/setting')
-                // return res.status(200).json({
-                //     err_code: 200,
-                //     message: 'Update avatar is OK'
-                // })
+                // res.redirect('/setting')
+                return res.status(200).json({
+                    err_code: 200,
+                    message: 'Update avatar is OK'
+                })
             })
         })
 })
@@ -359,8 +359,7 @@ router.get('/topic', function (req, res, next) {
                 topic=topic.toJSON()
                 topic.author_bio = author.bio
                 res.render('./topic/topic.html',{
-                    topic,
-                    user: 1
+                    topic
                 })
 
             })

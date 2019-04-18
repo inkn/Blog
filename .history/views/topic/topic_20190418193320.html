@@ -111,23 +111,27 @@
 </div>
 
 
-<!--// 作者信息-->
+<!--个人信息-->
+{{ if user}}
 <div style="position: fixed;right: 18px;top: 76px;width: 18%;">
+
+
     <div class='panel'>
 
         <div class='header'>
-            <span class='col_fade'>作者信息</span>
+            <span class='col_fade'>个人信息</span>
         </div>
         <div class='inner'>
             <div class='user_card'>
                 <div>
                     <a class='user_avatar' href="/#">
-                        <img src="{{ topic.author_avatar }}" title="{{ topic.author }}"/>
+                        <img src={{ user.avatar }} title={{ user.nickname }}/>
                     </a>
-                    <span class='user_name'><a class='dark' href="/#">{{ topic.author }}</a></span>
+                    <span class='user_name'><a class='dark' href="/#">{{ user.nickname }}</a></span>
+
                     <div class="space clearfix"></div>
                     <span class="signature">
-                            {{ if topic.author_bio === ''}}
+                            {{ if user.bio === ''}}
         “
 
             这家伙很懒，什么个性签名都没有留下。
@@ -136,23 +140,17 @@
                             {{ else }}
         “
 
-            {{ topic.author_bio }}
+            {{ user.bio}}
 
         ”
                             {{/if}}
                         </span>
-                    <div class="space clearfix"></div>
-                    <div class='inner'>
-                        <a href='/topic/create' id='create_topic_btn'>
-                            <span class='span-success'>发布话题</span>
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
-{{ /block }}
 
 {{ block 'script' }}
 <script>

@@ -359,8 +359,7 @@ router.get('/topic', function (req, res, next) {
                 topic=topic.toJSON()
                 topic.author_bio = author.bio
                 res.render('./topic/topic.html',{
-                    topic,
-                    user: 1
+                    topic
                 })
 
             })
